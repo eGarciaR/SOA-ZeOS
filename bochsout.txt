@@ -32,12 +32,12 @@
 00000000000i[     ]   SB16 support: no
 00000000000i[     ]   USB support: no
 00000000000i[     ]   VGA extension support: vbe 
-00000000000i[MEM0 ] allocated memory at 0x7fa9c5951010. after alignment, vector=0x7fa9c5952000
+00000000000i[MEM0 ] allocated memory at 0x7f98cf615010. after alignment, vector=0x7f98cf616000
 00000000000i[MEM0 ] 16.00MB
 00000000000i[MEM0 ] rom at 0xfffe0000/131072 ('/usr/local/share/bochs/BIOS-bochs-latest')
 00000000000i[MEM0 ] rom at 0xc0000/38400 ('/usr/local/share/bochs/VGABIOS-lgpl-latest')
 00000000000i[CMOS ] Using local time for initial clock
-00000000000i[CMOS ] Setting initial clock to: Thu Feb 18 17:43:40 2016 (time0=1455813820)
+00000000000i[CMOS ] Setting initial clock to: Mon Feb 22 23:37:03 2016 (time0=1456180623)
 00000000000i[DMA  ] channel 4 used by cascade
 00000000000i[DMA  ] channel 2 used by Floppy Drive
 00000000000i[FDD  ] fd0: './zeos.bin' ro=0, h=2,t=80,spt=18
@@ -98,66 +98,67 @@
 00000627895i[VBIOS] VBE Bios $Id: vbe.c,v 1.58 2006/08/19 09:39:43 vruppert Exp $
 00000640000e[VGA  ] character height = 1, skipping text update
 00000720000i[XGUI ] charmap update. Font Height is 16
-00001072143i[BIOS ] Booting from 0000:7C00
-00008943053i[FDD  ] partial read() on floppy image returns 148/512
-00008965786i[FDD  ] read() on floppy image returns 0
-00008988519i[FDD  ] read() on floppy image returns 0
-00009011252i[FDD  ] read() on floppy image returns 0
-00009033985i[FDD  ] read() on floppy image returns 0
-00009056718i[FDD  ] read() on floppy image returns 0
-00009079451i[FDD  ] read() on floppy image returns 0
-00009102184i[FDD  ] read() on floppy image returns 0
-00009124917i[FDD  ] read() on floppy image returns 0
-00009147650i[FDD  ] read() on floppy image returns 0
-00009170383i[FDD  ] read() on floppy image returns 0
-00009193116i[FDD  ] read() on floppy image returns 0
-00009215849i[FDD  ] read() on floppy image returns 0
-00009238582i[FDD  ] read() on floppy image returns 0
-00009261315i[FDD  ] read() on floppy image returns 0
-00009285979i[FDD  ] read() on floppy image returns 0
-00009308712i[FDD  ] read() on floppy image returns 0
-00009331445i[FDD  ] read() on floppy image returns 0
-00009354178i[FDD  ] read() on floppy image returns 0
-00009376911i[FDD  ] read() on floppy image returns 0
-00009399644i[FDD  ] read() on floppy image returns 0
-00009422377i[FDD  ] read() on floppy image returns 0
-00009445110i[FDD  ] read() on floppy image returns 0
-00009467843i[FDD  ] read() on floppy image returns 0
-00009490576i[FDD  ] read() on floppy image returns 0
-00009513309i[FDD  ] read() on floppy image returns 0
-00009536042i[FDD  ] read() on floppy image returns 0
-00009558775i[FDD  ] read() on floppy image returns 0
-00009581508i[FDD  ] read() on floppy image returns 0
-00009604241i[FDD  ] read() on floppy image returns 0
-00009626974i[FDD  ] read() on floppy image returns 0
-00009649707i[FDD  ] read() on floppy image returns 0
-00009672442i[FDD  ] read() on floppy image returns 0
-00009697152i[FDD  ] read() on floppy image returns 0
-00009719885i[FDD  ] read() on floppy image returns 0
-00009742618i[FDD  ] read() on floppy image returns 0
-00009765351i[FDD  ] read() on floppy image returns 0
-00009788084i[FDD  ] read() on floppy image returns 0
-00009810817i[FDD  ] read() on floppy image returns 0
-00009833550i[FDD  ] read() on floppy image returns 0
-01191484000i[CPU  ] protected mode
-01191484000i[CPU  ] CS.d_b = 32 bit
-01191484000i[CPU  ] SS.d_b = 32 bit
-01191484000i[CPU  ] | EAX=0011bffc  EBX=00001344  ECX=0000022e  EDX=00007dfb
-01191484000i[CPU  ] | ESP=0011bfec  EBP=0011bfec  ESI=ffff0200  EDI=00083ff4
-01191484000i[CPU  ] | IOPL=0 id vip vif ac vm rf nt of df IF tf sf zf af PF cf
-01191484000i[CPU  ] | SEG selector     base    limit G D
-01191484000i[CPU  ] | SEG sltr(index|ti|rpl)     base    limit G D
-01191484000i[CPU  ] |  CS:0023( 0004| 0|  3) 00000000 000fffff 1 1
-01191484000i[CPU  ] |  DS:002b( 0005| 0|  3) 00000000 000fffff 1 1
-01191484000i[CPU  ] |  SS:002b( 0005| 0|  3) 00000000 000fffff 1 1
-01191484000i[CPU  ] |  ES:002b( 0005| 0|  3) 00000000 000fffff 1 1
-01191484000i[CPU  ] |  FS:0000( 0003| 0|  0) 00000000 000fffff 1 1
-01191484000i[CPU  ] |  GS:0000( 0003| 0|  0) 00000000 000fffff 1 1
-01191484000i[CPU  ] | EIP=00100003 (00100003)
-01191484000i[CPU  ] | CR0=0x80000011 CR1=0 CR2=0x00000000
-01191484000i[CPU  ] | CR3=0x00029000 CR4=0x00000000
-01191484000i[CPU  ] >> jmp .+0xfffffffe (0x00100003) : EBFE
-01191484000i[CMOS ] Last time is 1455814415 (Thu Feb 18 17:53:35 2016)
-01191484000i[XGUI ] Exit.
-01191484000i[     ] restoring default signal behavior
-01191484000i[CTRL ] quit_sim called with exit code 1
+00001072151i[BIOS ] Booting from 0000:7C00
+00008943048i[FDD  ] partial read() on floppy image returns 148/512
+00008965781i[FDD  ] read() on floppy image returns 0
+00008988514i[FDD  ] read() on floppy image returns 0
+00009011247i[FDD  ] read() on floppy image returns 0
+00009033980i[FDD  ] read() on floppy image returns 0
+00009056713i[FDD  ] read() on floppy image returns 0
+00009079446i[FDD  ] read() on floppy image returns 0
+00009102179i[FDD  ] read() on floppy image returns 0
+00009124912i[FDD  ] read() on floppy image returns 0
+00009147645i[FDD  ] read() on floppy image returns 0
+00009170378i[FDD  ] read() on floppy image returns 0
+00009193111i[FDD  ] read() on floppy image returns 0
+00009215844i[FDD  ] read() on floppy image returns 0
+00009238577i[FDD  ] read() on floppy image returns 0
+00009261310i[FDD  ] read() on floppy image returns 0
+00009285974i[FDD  ] read() on floppy image returns 0
+00009308707i[FDD  ] read() on floppy image returns 0
+00009331440i[FDD  ] read() on floppy image returns 0
+00009354173i[FDD  ] read() on floppy image returns 0
+00009376906i[FDD  ] read() on floppy image returns 0
+00009399639i[FDD  ] read() on floppy image returns 0
+00009422372i[FDD  ] read() on floppy image returns 0
+00009445105i[FDD  ] read() on floppy image returns 0
+00009467838i[FDD  ] read() on floppy image returns 0
+00009490571i[FDD  ] read() on floppy image returns 0
+00009513304i[FDD  ] read() on floppy image returns 0
+00009536037i[FDD  ] read() on floppy image returns 0
+00009558770i[FDD  ] read() on floppy image returns 0
+00009581503i[FDD  ] read() on floppy image returns 0
+00009604236i[FDD  ] read() on floppy image returns 0
+00009626969i[FDD  ] read() on floppy image returns 0
+00009649702i[FDD  ] read() on floppy image returns 0
+00009672437i[FDD  ] read() on floppy image returns 0
+00009697147i[FDD  ] read() on floppy image returns 0
+00009719880i[FDD  ] read() on floppy image returns 0
+00009742613i[FDD  ] read() on floppy image returns 0
+00009765346i[FDD  ] read() on floppy image returns 0
+00009788079i[FDD  ] read() on floppy image returns 0
+00009810812i[FDD  ] read() on floppy image returns 0
+00009833545i[FDD  ] read() on floppy image returns 0
+00328898000p[XGUI ] >>PANIC<< POWER button turned off.
+00328898000i[CPU  ] protected mode
+00328898000i[CPU  ] CS.d_b = 32 bit
+00328898000i[CPU  ] SS.d_b = 32 bit
+00328898000i[CPU  ] | EAX=0011bffc  EBX=00001344  ECX=0000022e  EDX=00007dfb
+00328898000i[CPU  ] | ESP=0011bfec  EBP=0011bfec  ESI=ffff0200  EDI=00083ff4
+00328898000i[CPU  ] | IOPL=0 id vip vif ac vm rf nt of df IF tf sf zf af PF cf
+00328898000i[CPU  ] | SEG selector     base    limit G D
+00328898000i[CPU  ] | SEG sltr(index|ti|rpl)     base    limit G D
+00328898000i[CPU  ] |  CS:0023( 0004| 0|  3) 00000000 000fffff 1 1
+00328898000i[CPU  ] |  DS:002b( 0005| 0|  3) 00000000 000fffff 1 1
+00328898000i[CPU  ] |  SS:002b( 0005| 0|  3) 00000000 000fffff 1 1
+00328898000i[CPU  ] |  ES:002b( 0005| 0|  3) 00000000 000fffff 1 1
+00328898000i[CPU  ] |  FS:0000( 0003| 0|  0) 00000000 000fffff 1 1
+00328898000i[CPU  ] |  GS:0000( 0003| 0|  0) 00000000 000fffff 1 1
+00328898000i[CPU  ] | EIP=00100003 (00100003)
+00328898000i[CPU  ] | CR0=0x80000011 CR1=0 CR2=0x00000000
+00328898000i[CPU  ] | CR3=0x00029000 CR4=0x00000000
+00328898000i[CPU  ] >> jmp .+0xfffffffe (0x00100003) : EBFE
+00328898000i[CMOS ] Last time is 1456180787 (Mon Feb 22 23:39:47 2016)
+00328898000i[XGUI ] Exit.
+00328898000i[     ] restoring default signal behavior
+00328898000i[CTRL ] quit_sim called with exit code 1
