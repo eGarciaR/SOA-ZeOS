@@ -7,8 +7,8 @@ int pid;
 int add(int par1, int par2) {
 	asm ("pushl %ebp\n\t"
 	     "movl %esp,%ebp\n\t"
-	     "movl -4(%ebp),%eax\n\t"
-	     "addl -8(%ebp),%eax\n\t"
+	     "movl 8(%ebp),%eax\n\t"
+	     "addl 12(%ebp),%eax\n\t"
 	     "movl %ebp,%esp\n\t"
 	     "popl %ebp\n\t"
 	     "ret");
