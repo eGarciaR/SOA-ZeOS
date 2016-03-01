@@ -68,6 +68,8 @@
     movb $0x20, %al; \
     outb %al, $0x20
 
+#define ENOSYS 38
+
 
 ENTRY(keyboard_handler)
 	SAVE_ALL
@@ -97,14 +99,4 @@ fin:
 	movl %eax, 0x18(%esp)
 	RESTORE_ALL
 	iret
-
-ENTRY(sys_call_table)
-	.long sys_ni_syscall
-	.long sys_ni_syscall
-	.long sys_ni_syscall
-	.long sys_ni_syscall
-	.long sys_write
-.globl MAX_SYSCALL
-MAX_SYSCALL = (. - sys_call_table)/4
-	.long sys_functionname
 

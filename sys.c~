@@ -66,6 +66,3 @@ int sys_write(int fd, char * buffer, int size) {
 	} 
 	return res;
 }
-
-int gettime() {
-}

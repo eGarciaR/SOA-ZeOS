@@ -41,7 +41,7 @@
 00000000000i[DEV   ] PIIX3 PCI-to-ISA bridge present at device 1, function 0
 00000000000i[PLUGIN] init_dev of 'cmos' plugin device by virtual method
 00000000000i[CMOS  ] Using local time for initial clock
-00000000000i[CMOS  ] Setting initial clock to: Mon Feb 29 23:40:21 2016 (time0=1456785621)
+00000000000i[CMOS  ] Setting initial clock to: Tue Mar  1 12:03:07 2016 (time0=1456830187)
 00000000000i[PLUGIN] init_dev of 'dma' plugin device by virtual method
 00000000000i[DMA   ] channel 4 used by cascade
 00000000000i[PLUGIN] init_dev of 'pic' plugin device by virtual method
@@ -167,60 +167,60 @@
 00001529176i[BXVGA ] VBE known Display Interface b0c0
 00001529208i[BXVGA ] VBE known Display Interface b0c5
 00001532133i[VBIOS ] VBE Bios $Id: vbe.c,v 1.65 2014/07/08 18:02:25 vruppert Exp $
-00014040199i[BIOS  ] Booting from 0000:7c00
-00029731043i[FLOPPY] partial read() on floppy image returns 224/512
-00029775487i[FLOPPY] read() on floppy image returns 0
-00029819931i[FLOPPY] read() on floppy image returns 0
-00029864375i[FLOPPY] read() on floppy image returns 0
-00029908819i[FLOPPY] read() on floppy image returns 0
-00029953263i[FLOPPY] read() on floppy image returns 0
-00029997707i[FLOPPY] read() on floppy image returns 0
-00030043898i[FLOPPY] read() on floppy image returns 0
-00030088342i[FLOPPY] read() on floppy image returns 0
-00030132786i[FLOPPY] read() on floppy image returns 0
-00030177230i[FLOPPY] read() on floppy image returns 0
-00030221674i[FLOPPY] read() on floppy image returns 0
-00030266118i[FLOPPY] read() on floppy image returns 0
-00030310562i[FLOPPY] read() on floppy image returns 0
-00030355006i[FLOPPY] read() on floppy image returns 0
-00030399450i[FLOPPY] read() on floppy image returns 0
-00030443894i[FLOPPY] read() on floppy image returns 0
-00030488338i[FLOPPY] read() on floppy image returns 0
-00030532782i[FLOPPY] read() on floppy image returns 0
-00030577226i[FLOPPY] read() on floppy image returns 0
-00030621670i[FLOPPY] read() on floppy image returns 0
-00030666114i[FLOPPY] read() on floppy image returns 0
-00030710558i[FLOPPY] read() on floppy image returns 0
-00030755002i[FLOPPY] read() on floppy image returns 0
-00030799446i[FLOPPY] read() on floppy image returns 0
-00030845644i[FLOPPY] read() on floppy image returns 0
-00030890088i[FLOPPY] read() on floppy image returns 0
-00030934532i[FLOPPY] read() on floppy image returns 0
-00030978976i[FLOPPY] read() on floppy image returns 0
-00031023420i[FLOPPY] read() on floppy image returns 0
-00031067864i[FLOPPY] read() on floppy image returns 0
-00031112308i[FLOPPY] read() on floppy image returns 0
-00108805844i[XGUI  ] charmap update. Font Height is 16
-01840308000p[XGUI  ] >>PANIC<< POWER button turned off.
-01840308000i[CPU0  ] CPU is in protected mode (active)
-01840308000i[CPU0  ] CS.mode = 32 bit
-01840308000i[CPU0  ] SS.mode = 32 bit
-01840308000i[CPU0  ] EFER   = 0x00000000
-01840308000i[CPU0  ] | EAX=0011bffc  EBX=00001380  ECX=0000022e  EDX=00007dfb
-01840308000i[CPU0  ] | ESP=0011bfec  EBP=0011bfec  ESI=000e0200  EDI=00003ff4
-01840308000i[CPU0  ] | IOPL=0 id vip vif ac vm rf nt of df IF tf sf zf af PF cf
-01840308000i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
-01840308000i[CPU0  ] |  CS:0023( 0004| 0|  3) 00000000 ffffffff 1 1
-01840308000i[CPU0  ] |  DS:002b( 0005| 0|  3) 00000000 ffffffff 1 1
-01840308000i[CPU0  ] |  SS:002b( 0005| 0|  3) 00000000 ffffffff 1 1
-01840308000i[CPU0  ] |  ES:002b( 0005| 0|  3) 00000000 ffffffff 1 1
-01840308000i[CPU0  ] |  FS:0000( 0000| 0|  0) 00000000 00000000 0 0
-01840308000i[CPU0  ] |  GS:0000( 0000| 0|  0) 00000000 00000000 0 0
-01840308000i[CPU0  ] | EIP=00100003 (00100003)
-01840308000i[CPU0  ] | CR0=0x80000011 CR2=0x00000000
-01840308000i[CPU0  ] | CR3=0x0002a000 CR4=0x00000000
-01840308000i[CPU0  ] 0x00100003>> jmp .-2 (0x00100003) : EBFE
-01840308000i[CMOS  ] Last time is 1456786081 (Mon Feb 29 23:48:01 2016)
-01840308000i[XGUI  ] Exit
-01840308000i[      ] restoring default signal behavior
-01840308000i[SIM   ] quit_sim called with exit code 1
+00014040191i[BIOS  ] Booting from 0000:7c00
+00029731035i[FLOPPY] partial read() on floppy image returns 316/512
+00029775479i[FLOPPY] read() on floppy image returns 0
+00029819923i[FLOPPY] read() on floppy image returns 0
+00029864367i[FLOPPY] read() on floppy image returns 0
+00029908811i[FLOPPY] read() on floppy image returns 0
+00029953255i[FLOPPY] read() on floppy image returns 0
+00029997699i[FLOPPY] read() on floppy image returns 0
+00030043890i[FLOPPY] read() on floppy image returns 0
+00030088334i[FLOPPY] read() on floppy image returns 0
+00030132778i[FLOPPY] read() on floppy image returns 0
+00030177222i[FLOPPY] read() on floppy image returns 0
+00030221666i[FLOPPY] read() on floppy image returns 0
+00030266110i[FLOPPY] read() on floppy image returns 0
+00030310554i[FLOPPY] read() on floppy image returns 0
+00030354998i[FLOPPY] read() on floppy image returns 0
+00030399442i[FLOPPY] read() on floppy image returns 0
+00030443886i[FLOPPY] read() on floppy image returns 0
+00030488330i[FLOPPY] read() on floppy image returns 0
+00030532774i[FLOPPY] read() on floppy image returns 0
+00030577218i[FLOPPY] read() on floppy image returns 0
+00030621662i[FLOPPY] read() on floppy image returns 0
+00030666106i[FLOPPY] read() on floppy image returns 0
+00030710550i[FLOPPY] read() on floppy image returns 0
+00030754994i[FLOPPY] read() on floppy image returns 0
+00030799438i[FLOPPY] read() on floppy image returns 0
+00030845636i[FLOPPY] read() on floppy image returns 0
+00030890080i[FLOPPY] read() on floppy image returns 0
+00030934524i[FLOPPY] read() on floppy image returns 0
+00030978968i[FLOPPY] read() on floppy image returns 0
+00031023412i[FLOPPY] read() on floppy image returns 0
+00031067856i[FLOPPY] read() on floppy image returns 0
+00031112300i[FLOPPY] read() on floppy image returns 0
+00084333248i[XGUI  ] charmap update. Font Height is 16
+01069012000p[XGUI  ] >>PANIC<< POWER button turned off.
+01069012000i[CPU0  ] CPU is in protected mode (active)
+01069012000i[CPU0  ] CS.mode = 32 bit
+01069012000i[CPU0  ] SS.mode = 32 bit
+01069012000i[CPU0  ] EFER   = 0x00000000
+01069012000i[CPU0  ] | EAX=ffffffff  EBX=00001380  ECX=00000000  EDX=00007dfb
+01069012000i[CPU0  ] | ESP=0011bfd0  EBP=0011bfec  ESI=000e0200  EDI=00003ff4
+01069012000i[CPU0  ] | IOPL=0 id vip vif ac vm rf nt of df IF tf sf zf AF PF CF
+01069012000i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
+01069012000i[CPU0  ] |  CS:0023( 0004| 0|  3) 00000000 ffffffff 1 1
+01069012000i[CPU0  ] |  DS:002b( 0005| 0|  3) 00000000 ffffffff 1 1
+01069012000i[CPU0  ] |  SS:002b( 0005| 0|  3) 00000000 ffffffff 1 1
+01069012000i[CPU0  ] |  ES:002b( 0005| 0|  3) 00000000 ffffffff 1 1
+01069012000i[CPU0  ] |  FS:0000( 0000| 0|  0) 00000000 00000000 0 0
+01069012000i[CPU0  ] |  GS:0000( 0000| 0|  0) 00000000 00000000 0 0
+01069012000i[CPU0  ] | EIP=0010002b (0010002b)
+01069012000i[CPU0  ] | CR0=0x80000011 CR2=0x00000000
+01069012000i[CPU0  ] | CR3=0x0002a000 CR4=0x00000000
+01069012000i[CPU0  ] 0x0010002b>> jmp .-2 (0x0010002b) : EBFE
+01069012000i[CMOS  ] Last time is 1456830454 (Tue Mar  1 12:07:34 2016)
+01069012000i[XGUI  ] Exit
+01069012000i[      ] restoring default signal behavior
+01069012000i[SIM   ] quit_sim called with exit code 1

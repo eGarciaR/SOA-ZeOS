@@ -68,6 +68,8 @@
     movb $0x20, %al; \
     outb %al, $0x20
 
+#define ENOSYS=38
+
 
 ENTRY(keyboard_handler)
 	SAVE_ALL
@@ -97,6 +99,4 @@ fin:
 	movl %eax, 0x18(%esp)
 	RESTORE_ALL
 	iret
-
-ENTRY
 

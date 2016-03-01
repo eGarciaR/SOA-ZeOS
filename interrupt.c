@@ -6,6 +6,7 @@
 #include <segment.h>
 #include <hardware.h>
 #include <io.h>
+#include <system.h>
 
 #include <zeos_interrupt.h>
 
@@ -76,6 +77,8 @@ void setTrapHandler(int vector, void (*handler)(), int maxAccessibleFromPL)
 void keyboard_handler();
 void clock_interrupt_handler();
 
+void system_call_handler();
+
 void setIdt()
 {
   /* Program interrups/exception service routines */
@@ -94,6 +97,7 @@ void setIdt()
 }
 
 void clock_service_routine() {
+	++zeos_ticks;
 	zeos_show_clock();
 }
 
@@ -111,18 +115,3 @@ void keyboard_service_routine() {
     
   }  
 }
-
-int sys_ni_syscall() {
-	return -38; /*ENOSYS*/
-}
-
-int sys_write(int fd, char * buffer, int size) {
-	int err;
-	if ((err=check_fd(fd,"ESCRIPTURA")) == 0) {
-		if (buffer != NULL) {
-			if (size > 0) {
-			}
-		}
-	} 
-}
-
