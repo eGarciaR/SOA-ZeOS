@@ -18,7 +18,7 @@ void add(int par1, int par2) {
 }
 
 long outer(long n) {
-  int i;
+  int i; 
   long acum;
   acum = 0;
   for (i = 0; i < n; i++) acum = acum + inner(i);
@@ -35,6 +35,8 @@ int __attribute__ ((__section__(".text.main")))
   acum = 0;
   acum = outer(count);
   add(4,5);
-  while(1) { };
+  //write(1,"hola eric",9);
+	runjp();
+  while(1) {};
   return 0;
 }

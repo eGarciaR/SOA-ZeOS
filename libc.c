@@ -3,10 +3,11 @@
  */
 
 #include <libc.h>
-
+#include <errno.h>
 #include <types.h>
 
 int errno;
+int res;
 
 void itoa(int a, char *b)
 {
@@ -44,20 +45,27 @@ int strlen(char *a)
 }
 
 int write (int fd, char * buffer, int size) {
-	int res;
-	asm("pushl %%ebx \n\t"
-			"movl 8(%%ebp),%%ebx \n\t"
-			"movl 12(%%ebp),%%ecx \n\t"
-			"movl 16(%%ebp),%%edx \n\t"
-			"movl $4,%%eax \n\t"
-			"int $0x80 \n\t"
-			"popl %%ebx \n\t"
-			:"=a" (res));
+	asm("pushl %ebx;"
+			"movl 8(%ebp),%ebx;"
+			"movl 12(%ebp),%ecx;"
+			"movl 16(%ebp),%edx;"
+			"movl $4,%eax;"
+			"int $0x80;"
+			"popl %ebx;"
+			"movl %eax, res"
+	);
 	
 	if (res < 0) {
 		errno = -res;
 		res = -1;
 	}
 	return res;
+}
+
+void perror() {
+	if (errno == EFAULT) write(1,"Bad address",strlen("Bad address"));
+	else if (errno == EINVAL) write(1,"Invalid argument",strlen("Invalid argument"));
+	else write(1,"Error",strlen("Error"));
+	write (1,"\n",1);
 }
 
