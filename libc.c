@@ -62,6 +62,19 @@ int write (int fd, char * buffer, int size) {
 	return res;
 }
 
+int gettime () {
+	asm("movl $10,%eax;"
+			"int $0x80;"
+			"movl %eax, res"
+	);
+	
+	if (res < 0) {
+		errno = -res;
+		res = -1;
+	}
+	return res;
+}
+
 void perror() {
 	if (errno == EFAULT) write(1,"Bad address",strlen("Bad address"));
 	else if (errno == EINVAL) write(1,"Invalid argument",strlen("Invalid argument"));
