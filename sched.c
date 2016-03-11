@@ -15,6 +15,9 @@ union task_union protected_tasks[NR_TASKS+2]
 
 union task_union *task = &protected_tasks[1]; /* == union task_union task[NR_TASKS] */
 
+struct list_head freequeue; /*Free queue*/
+struct list_head readyqueue; /*Ready queue*/
+
 #if 0
 struct task_struct *list_head_to_task_struct(struct list_head *l)
 {
@@ -70,7 +73,17 @@ void init_task1(void)
 
 
 void init_sched(){
-
+  /*FREE QUEUE*/
+  INIT_LIST_HEAD( &freequeue );
+  
+  int i;
+  for (i = 0; i < NR_TASKS; ++i) {
+    list_add( &(task[i].task.list), &freequeue );
+  }
+  
+  /*READY QUEUE*/
+  INIT_LIST_HEAD( &readyqueue );
+  
 }
 
 struct task_struct* current()
