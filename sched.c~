@@ -17,7 +17,6 @@ union task_union *task = &protected_tasks[1]; /* == union task_union task[NR_TAS
 
 struct list_head freequeue; /*Free queue*/
 struct list_head readyqueue; /*Ready queue*/
-struct task_strict *idle_task; /*idle task*/
 
 #if 0
 struct task_struct *list_head_to_task_struct(struct list_head *l)
@@ -65,13 +64,6 @@ void cpu_idle(void)
 
 void init_idle (void)
 {
-	struct list_head *firstFree = list_first(&freequeue);
-	list_del(firstFree); // Esborrem l'element de la cua que volem utilitzar
-	idle_task = list_head_to_task_struct(firstFree);
-
-	// task_struct to task_union ??
-
-	idle_task->PID = 0;
 
 }
 

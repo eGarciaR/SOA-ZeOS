@@ -41,7 +41,7 @@
 00000000000i[DEV   ] PIIX3 PCI-to-ISA bridge present at device 1, function 0
 00000000000i[PLUGIN] init_dev of 'cmos' plugin device by virtual method
 00000000000i[CMOS  ] Using local time for initial clock
-00000000000i[CMOS  ] Setting initial clock to: Sat Mar 12 23:59:16 2016 (time0=1457823556)
+00000000000i[CMOS  ] Setting initial clock to: Tue Mar 15 10:29:22 2016 (time0=1458034162)
 00000000000i[PLUGIN] init_dev of 'dma' plugin device by virtual method
 00000000000i[DMA   ] channel 4 used by cascade
 00000000000i[PLUGIN] init_dev of 'pic' plugin device by virtual method
@@ -163,7 +163,7 @@
 00001398970i[BIOS  ] Firmware waking vector 0xff00cc
 00001400765i[PCI   ] i440FX PMC write to PAM register 59 (TLB Flush)
 00001401488i[BIOS  ] bios_table_cur_addr: 0x000fa6c4
-00003971660i[XGUI  ] charmap update. Font Height is 16
+00006628016i[XGUI  ] charmap update. Font Height is 16
 00029625338i[BIOS  ] Booting from 0000:7c00
 00045296402i[FLOPPY] partial read() on floppy image returns 380/512
 00045340846i[FLOPPY] read() on floppy image returns 0
@@ -197,26 +197,26 @@
 00046587633i[FLOPPY] read() on floppy image returns 0
 00046632077i[FLOPPY] read() on floppy image returns 0
 00046676521i[FLOPPY] read() on floppy image returns 0
-00439076000p[XGUI  ] >>PANIC<< POWER button turned off.
-00439076000i[CPU0  ] CPU is in protected mode (active)
-00439076000i[CPU0  ] CS.mode = 32 bit
-00439076000i[CPU0  ] SS.mode = 32 bit
-00439076000i[CPU0  ] EFER   = 0x00000000
-00439076000i[CPU0  ] | EAX=00000000  EBX=0000350e  ECX=0000022e  EDX=00007dfb
-00439076000i[CPU0  ] | ESP=0011bfec  EBP=0011bfec  ESI=000e0200  EDI=00003ff4
-00439076000i[CPU0  ] | IOPL=0 id vip vif ac vm rf nt of df IF tf sf ZF af PF cf
-00439076000i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
-00439076000i[CPU0  ] |  CS:0023( 0004| 0|  3) 00000000 ffffffff 1 1
-00439076000i[CPU0  ] |  DS:002b( 0005| 0|  3) 00000000 ffffffff 1 1
-00439076000i[CPU0  ] |  SS:002b( 0005| 0|  3) 00000000 ffffffff 1 1
-00439076000i[CPU0  ] |  ES:002b( 0005| 0|  3) 00000000 ffffffff 1 1
-00439076000i[CPU0  ] |  FS:0000( 0000| 0|  0) 00000000 00000000 0 0
-00439076000i[CPU0  ] |  GS:0000( 0000| 0|  0) 00000000 00000000 0 0
-00439076000i[CPU0  ] | EIP=00100009 (00100009)
-00439076000i[CPU0  ] | CR0=0x80000011 CR2=0x00000000
-00439076000i[CPU0  ] | CR3=0x0002a000 CR4=0x00000000
-00439076000i[CPU0  ] 0x00100009>> jmp .-2 (0x00100009) : EBFE
-00439076000i[CMOS  ] Last time is 1457823665 (Sun Mar 13 00:01:05 2016)
-00439076000i[XGUI  ] Exit
-00439076000i[      ] restoring default signal behavior
-00439076000i[SIM   ] quit_sim called with exit code 1
+00209660000p[XGUI  ] >>PANIC<< POWER button turned off.
+00209660000i[CPU0  ] CPU is in protected mode (active)
+00209660000i[CPU0  ] CS.mode = 32 bit
+00209660000i[CPU0  ] SS.mode = 32 bit
+00209660000i[CPU0  ] EFER   = 0x00000000
+00209660000i[CPU0  ] | EAX=00000000  EBX=0000350e  ECX=0000022e  EDX=00007dfb
+00209660000i[CPU0  ] | ESP=0011bfec  EBP=0011bfec  ESI=000e0200  EDI=00003ff4
+00209660000i[CPU0  ] | IOPL=0 id vip vif ac vm rf nt of df IF tf sf ZF af PF cf
+00209660000i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
+00209660000i[CPU0  ] |  CS:0023( 0004| 0|  3) 00000000 ffffffff 1 1
+00209660000i[CPU0  ] |  DS:002b( 0005| 0|  3) 00000000 ffffffff 1 1
+00209660000i[CPU0  ] |  SS:002b( 0005| 0|  3) 00000000 ffffffff 1 1
+00209660000i[CPU0  ] |  ES:002b( 0005| 0|  3) 00000000 ffffffff 1 1
+00209660000i[CPU0  ] |  FS:0000( 0000| 0|  0) 00000000 00000000 0 0
+00209660000i[CPU0  ] |  GS:0000( 0000| 0|  0) 00000000 00000000 0 0
+00209660000i[CPU0  ] | EIP=00100009 (00100009)
+00209660000i[CPU0  ] | CR0=0x80000011 CR2=0x00000000
+00209660000i[CPU0  ] | CR3=0x0002a000 CR4=0x00000000
+00209660000i[CPU0  ] 0x00100009>> jmp .-2 (0x00100009) : EBFE
+00209660000i[CMOS  ] Last time is 1458034214 (Tue Mar 15 10:30:14 2016)
+00209660000i[XGUI  ] Exit
+00209660000i[      ] restoring default signal behavior
+00209660000i[SIM   ] quit_sim called with exit code 1
