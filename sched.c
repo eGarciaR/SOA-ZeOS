@@ -93,8 +93,6 @@ void init_task1(void)
 	
 	page_table_entry * dir_task1 = get_DIR(&init_task1_union->task);
 	set_cr3(dir_task1);
-  
-    
 }
 
 
@@ -110,6 +108,33 @@ void init_sched(){
   /*READY QUEUE*/
   INIT_LIST_HEAD( &readyqueue );
   
+}
+
+void inner_task_switch(union task_union*t) {
+
+	tss.esp0 = (unsigned long)&t->stack[KERNEL_STACK_SIZE];	
+	
+	page_table_entry * dir_task_switch = get_DIR(&t->task);
+	set_cr3(dir_task1);
+
+	// 3, 4, 5 i 6
+	
+}
+
+void task_switch(union task_union*t) {
+	/*SAVE esi, edi and ebx*/
+	asm("pushl %esi;"
+			"pushl %edi;"
+			"pushl %ebx"
+	);
+
+	inner_task_switch(t);	
+
+	/*RESTORE esi, edi and ebx*/
+	asm("popl %esi;"
+			"popl %edi;"
+			"popl %ebx"
+	);
 }
 
 struct task_struct* current()
