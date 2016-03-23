@@ -17,13 +17,12 @@ union task_union *task = &protected_tasks[1]; /* == union task_union task[NR_TAS
 
 struct list_head freequeue; /*Free queue*/
 struct list_head readyqueue; /*Ready queue*/
+struct task_struct *idle_task; /*idle task*/
 
-#if 0
 struct task_struct *list_head_to_task_struct(struct list_head *l)
 {
   return list_entry( l, struct task_struct, list);
 }
-#endif
 
 extern struct list_head blocked;
 
@@ -64,11 +63,33 @@ void cpu_idle(void)
 
 void init_idle (void)
 {
+	struct list_head *firstFree = list_first(&freequeue);
+	list_del(firstFree); // Esborrem l'element de la cua que volem utilitzar
+	idle_task = list_head_to_task_struct(firstFree);
+
+	union task_union * idle_task_union = (union task_union *)idle_task;
+
+	idle_task_union->task.PID = 0;
+	allocate_DIR(&idle_task_union->task);
+	idle_task_union->stack[1023] = (unsigned long)cpu_idle; //(unsigned long)&cpu_idle;
+	idle_task_union->stack[1022] = 0; /*ebp*/
+	idle_task_union->task.init_ebp = (unsigned long)&(idle_task_union->stack[1022]);
 
 }
 
 void init_task1(void)
-{
+{	
+  struct list_head *firstFree = list_first(&freequeue);
+  list_del(firstFree);
+  struct task_struct *init_task1 = list_head_to_task_struct(firstFree);
+  
+  union task_union * init_task1_union = (union task_union *)init_task1;
+  
+  init_task1_union->task.PID = 0;
+  allocate_DIR(&init_task1_union->task);
+  set_user_pages(&init_task1_union->task);
+  
+    
 }
 
 

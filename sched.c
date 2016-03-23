@@ -88,6 +88,11 @@ void init_task1(void)
   init_task1_union->task.PID = 0;
   allocate_DIR(&init_task1_union->task);
   set_user_pages(&init_task1_union->task);
+
+	tss.esp0 = (unsigned long)&init_task1_union->stack[KERNEL_STACK_SIZE];
+	
+	page_table_entry * dir_task1 = get_DIR(&init_task1_union->task);
+	set_cr3(dir_task1);
   
     
 }
