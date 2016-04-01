@@ -131,6 +131,16 @@ void inner_task_switch(union task_union *new) {
 			:
 			: "g" (current_kernel_esp), "g" (new_kernel_esp)
 	);
+	/*struct task_struct *curr_task_pcb = current();
+
+	__asm__ __volatile__ (
+        "mov %%ebp,%0\n"
+        "movl %1, %%esp\n"
+        "popl %%ebp\n"
+        "ret\n"
+        : "=g" (curr_task_pcb->kernel_esp)
+        :"r" (new->task.kernel_esp)
+    );*/
 
 }
 
