@@ -75,6 +75,32 @@ int gettime () {
 	return res;
 }
 
+int getpid () {
+	asm("movl $20,%eax;"
+	    "int $0x80;"
+	    "movl %eax, res"
+	);
+	
+	if (res < 0) {
+	  errno = -res;
+	  res = -1;
+	}
+	return res;
+}
+
+int fork() {
+  asm("movl $2,%eax;"
+      "int $0x80;"
+      "movl %eax, res"
+  );
+  
+  if (res < 0) {
+    errno = -res;
+    res = -1;
+  }
+  return res;
+}
+
 void perror() {
 	if (errno == EFAULT) write(1,"Bad address",strlen("Bad address"));
 	else if (errno == EINVAL) write(1,"Invalid argument",strlen("Invalid argument"));

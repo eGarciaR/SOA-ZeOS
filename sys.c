@@ -19,6 +19,8 @@
 #define LECTURA 0
 #define ESCRIPTURA 1
 
+int pid = 2;
+
 int check_fd(int fd, int permissions)
 {
   if (fd!=1) return -9; /*EBADF*/
@@ -38,9 +40,15 @@ int sys_getpid()
 
 int sys_fork()
 {
-  int PID=-1;
-
-  // creates the child process
+  int PID;
+  
+  if (list_empty(&freequeue)) PID = -1; // error
+  struct list_head *firstFree = list_first(&freequeue);
+  list_del(firstFree);
+  struct task_struct *fork = list_head_to_task_struct(firstFree);
+  
+  ++pid;
+  PID = pid;
   
   return PID;
 }

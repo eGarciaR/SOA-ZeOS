@@ -17,8 +17,8 @@ union task_union *task = &protected_tasks[1]; /* == union task_union task[NR_TAS
 
 struct list_head freequeue; /*Free queue*/
 struct list_head readyqueue; /*Ready queue*/
-//struct task_struct *idle_task; /*idle task*/
-//struct task_struct *init_task; // TEST
+struct task_struct *idle_task; /*idle task*/
+struct task_struct *init_task; // TEST
 
 struct task_struct *list_head_to_task_struct(struct list_head *l)
 {
@@ -58,7 +58,7 @@ void cpu_idle(void)
 
 	while(1)
 	{
-	;
+	printk("idle");
 	}
 }
 
@@ -121,16 +121,17 @@ void inner_task_switch(union task_union *new) {
 	set_cr3(dir_task_switch);
 
 	struct task_struct * current_TS = current();
-	unsigned long *current_kernel_esp = &current_TS->kernel_esp;
 	unsigned long new_kernel_esp = new->task.kernel_esp;
 
 	asm("mov %%ebp,%0;"
 			"mov %1,%%esp;"
 			"popl %%ebp;"
-			"ret"
+			"ret;"
 			:
-			: "g" (current_kernel_esp), "g" (new_kernel_esp)
+			: "g" (current_TS->kernel_esp), "g" (new_kernel_esp)
 	);
+	
+	// Primer g, usar m o g
 
 }
 
@@ -138,15 +139,15 @@ void task_switch(union task_union *new) {
 	/*SAVE esi, edi and ebx*/
 	asm("pushl %esi;"
 			"pushl %edi;"
-			"pushl %ebx"
+			"pushl %ebx;"
 	);
-
+	
 	inner_task_switch(new);	
 
 	/*RESTORE esi, edi and ebx*/
-	asm("popl %esi;"
+	asm("popl %ebx;"
 			"popl %edi;"
-			"popl %ebx"
+			"popl %esi;"
 	);
 }
 

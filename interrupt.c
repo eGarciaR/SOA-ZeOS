@@ -100,23 +100,15 @@ void setIdt()
 //TEST
 void test_task_switch() {
 	if (current()->PID == 1) {
-		printc_xy(0,23,'n');
-		task_switch(idle_task);
+		task_switch((union task_union *)idle_task);
 	}
 	else {
-		printc_xy(0,23,'d');
-		task_switch(init_task);
+		task_switch((union task_union *)init_task);
 	}
 }
 
 void clock_service_routine() {
 	++zeos_ticks;
-	/*if (testTS = 1000) { // TEST
-		test_task_switch();
-		testTS = 0;
-	} else {
-		++testTS;
-	}*/
 	zeos_show_clock();
 }
 
@@ -128,8 +120,8 @@ void keyboard_service_routine() {
     char d;
     d = char_map[data];
     if (d == '\0')d = 'c';
-    //printc_xy(0,23,d);
-		test_task_switch();
+    printc_xy(0,23,d);
+    test_task_switch();
   }
   else { // Make
     
