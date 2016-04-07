@@ -58,7 +58,7 @@ void cpu_idle(void)
 
 	while(1)
 	{
-	printk("idle");
+	;
 	}
 }
 

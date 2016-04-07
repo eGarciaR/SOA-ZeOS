@@ -38,6 +38,10 @@ int sys_getpid()
 	return current()->PID;
 }
 
+int ret_from_fork() {
+	return 0;
+}
+
 int sys_fork(void)
 {
   int PID = -1;
@@ -86,11 +90,30 @@ int sys_fork(void)
 		copy_data((void*)(pag<<12),(void*)((pag+NUM_PAG_DATA)<<12),PAGE_SIZE);
 		del_ss_pag(parent_PT,pag+NUM_PAG_DATA);
 	}
+  /*Deny access from parent to child*/
 	set_cr3(get_DIR(current()));
 
+	/*Assign PID*/
 	childUnion->task.PID=++pid;
   PID = pid;
-  
+
+	int kernel_ebp;
+	asm("movl %%ebp, %0;"
+			: "=g" (kernel_ebp)
+			:
+		 );
+  kernel_ebp = (kernel_ebp - (int)current()) + (int)(childUnion);
+	childUnion->task.kernel_esp = kernel_ebp + sizeof(unsigned long);
+
+	unsigned long aux_ebp =*(unsigned long*)kernel_ebp;
+
+	childUnion->task.kernel_esp -= sizeof(unsigned long);
+	*(unsigned long*)(childUnion->task.kernel_esp) = (unsigned long)&ret_from_fork;
+	childUnion->task.kernel_esp -= sizeof(unsigned long);
+	*(unsigned long*)(childUnion->task.kernel_esp) = aux_ebp;
+
+	list_add_tail(&(childUnion->task.list), &readyqueue);
+
   return PID;
 }
 
