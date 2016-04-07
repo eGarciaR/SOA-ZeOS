@@ -119,6 +119,19 @@ int sys_fork(void)
 
 void sys_exit()
 {  
+	int i; 
+	page_table_entry *processPT = get_PT(current());
+
+	for(i=0; i<NUM_PAG_DATA;++i) {
+		free_frame(get_frame(processPT,PAG_LOG_INIT_DATA+i));
+		del_ss_pag(processPT,PAG_LOG_INIT_DATA+i);
+	}
+	
+	list_add_tail(&(current()->list),&freequeue);
+	current()->PID=-1;
+
+	sched_next_rr();
+	
 }
 
 int sys_write(int fd, char * buffer, int size) {
@@ -142,4 +155,19 @@ int sys_write(int fd, char * buffer, int size) {
 
 int sys_gettime() {
 	return zeos_ticks;
+}
+
+extern int remaining_quantum;
+
+int sys_get_stats(int pid, struct stats *st) {
+	int i;
+	if (pid < 0) return -EINVAL;
+	for(i=0;i<NR_TASKS;++i) {
+		if (task[i].task.PID == pid) {
+			task[i].task.process_stats.remaining_ticks = remaining_quantum;
+			copy_to_user(&(task[i].task.process_stats),st,sizeof(struct stats));
+			return 0;
+		}
+	}
+	return -ESRCH;
 }

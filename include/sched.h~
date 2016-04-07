@@ -19,6 +19,8 @@ struct task_struct {
   page_table_entry * dir_pages_baseAddr;
   struct list_head list;
   unsigned long kernel_esp;
+	int quantum;
+	struct stats process_stats;
 };
 
 union task_union {
@@ -28,6 +30,8 @@ union task_union {
 
 extern union task_union protected_tasks[NR_TASKS+2];
 extern union task_union *task; /* Vector de tasques */
+extern struct list_head freequeue; /*Free queue*/
+extern struct list_head readyqueue; /*Ready queue*/
 extern struct task_struct *idle_task; /*idle task*/
 extern struct task_struct *init_task; // TEST
 
@@ -59,5 +63,6 @@ void sched_next_rr();
 void update_process_state_rr(struct task_struct *t, struct list_head *dest);
 int needs_sched_rr();
 void update_sched_data_rr();
+void schedule();
 
 #endif  /* __SCHED_H__ */

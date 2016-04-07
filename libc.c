@@ -101,6 +101,32 @@ int fork() {
   return res;
 }
 
+void exit() {
+	asm("movl $1,%eax;"
+      "int $0x80;"
+  );
+}
+
+int get_stats(int pid, struct stats *st) {
+	/*asm("movl $35,%eax;"
+      "int $0x80;"
+      "movl %eax, res;"
+			"movl %ebx, pid;"
+			"movl %ecx, st"
+  );*/
+	__asm__ __volatile__(
+        "int $0x80\n"
+        : "=a" (res)
+        : "b" (pid), "c" (st), "a" (35)
+    );
+  
+  if (res < 0) {
+    errno = -res;
+    res = -1;
+  }
+  return res;
+}
+
 void perror() {
 	if (errno == EFAULT) write(1,"Bad address",strlen("Bad address"));
 	else if (errno == EINVAL) write(1,"Invalid argument",strlen("Invalid argument"));

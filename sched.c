@@ -27,6 +27,9 @@ struct task_struct *list_head_to_task_struct(struct list_head *l)
 
 extern struct list_head blocked;
 
+#define DEFAULT_QUANTUM 10
+int remaining_quantum = 0;
+
 
 /* get_DIR - Returns the Page Directory address for task 't' */
 page_table_entry * get_DIR (struct task_struct *t) 
@@ -71,6 +74,7 @@ void init_idle (void)
 	union task_union * idle_task_union = (union task_union *)idle_task;
 
 	idle_task_union->task.PID = 0;
+	idle_task_union->task.quantum = DEFAULT_QUANTUM;
 	allocate_DIR(&idle_task_union->task);
 	idle_task_union->stack[KERNEL_STACK_SIZE-1] = (unsigned long)cpu_idle; //(unsigned long)&cpu_idle;
 	idle_task_union->stack[KERNEL_STACK_SIZE-2] = 0; /*ebp*/
@@ -89,6 +93,8 @@ void init_task1(void)
 	union task_union * init_task1_union = (union task_union *)init_task;
   
   init_task1_union->task.PID = 1;
+	init_task1_union->task.quantum = DEFAULT_QUANTUM;
+	remaining_quantum = DEFAULT_QUANTUM;
   allocate_DIR(&init_task1_union->task);
   set_user_pages(&init_task1_union->task);
 
@@ -149,6 +155,58 @@ void task_switch(union task_union *new) {
 			"popl %edi;"
 			"popl %esi;"
 	);
+}
+
+/*Scheduling policy*/
+
+int get_quantum(struct task_struct *t) {
+	return t->quantum;
+}
+
+void set_quantum(struct task_struct *t, int new_quantum) {
+	t->quantum = new_quantum;
+}
+
+void update_sched_data_rr(void) {
+	--remaining_quantum;
+}
+
+int needs_sched_rr(void) {
+	if ((remaining_quantum <= 0)&&(!list_empty(&readyqueue))) return 1;
+	if (remaining_quantum <= 0) remaining_quantum = get_quantum(current());
+	else return 0;
+}
+
+void update_process_state_rr(struct task_struct *t, struct list_head *dst_queue) {
+
+	
+
+}
+
+void sched_next_rr(void) {
+	struct task_struct *t;
+
+	if (!list_empty(&readyqueue)) {
+		struct list_head *next_process;
+		next_process = list_first(&readyqueue);
+		list_del(next_process);
+		t = list_head_to_task_struct(next_process);
+	}
+	else {
+		t = idle_task;
+	}
+	remaining_quantum = get_quantum(t);
+	task_switch((union task_union*)t);
+}
+
+void schedule() {
+	update_sched_data_rr();
+	if (needs_sched_rr()) { /*Necessity to change the current process*/
+		update_process_state_rr(current(),&readyqueue);
+		sched_next_rr();
+	}
+	else { /*There is no reason to change the current process yet*/
+	}
 }
 
 struct task_struct* current()

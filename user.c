@@ -35,7 +35,7 @@ int __attribute__ ((__section__(".text.main")))
   acum = 0;
   acum = outer(count);
   add(4,5);
-  //runjp();
+  runjp();
   while(1) {
     //itoa(getpid(),buff);
     //write(1,buff,strlen(buff));

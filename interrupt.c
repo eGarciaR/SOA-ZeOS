@@ -7,7 +7,7 @@
 #include <hardware.h>
 #include <io.h>
 #include <system.h>
-#include <sched.h> //TEST
+#include <sched.h>
 
 #include <zeos_interrupt.h>
 
@@ -110,6 +110,7 @@ void test_task_switch() {
 void clock_service_routine() {
 	++zeos_ticks;
 	zeos_show_clock();
+	schedule();
 }
 
 void keyboard_service_routine() {
