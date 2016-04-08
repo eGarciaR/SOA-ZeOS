@@ -44,19 +44,19 @@ int ret_from_fork() {
 
 int sys_fork(void)
 {
-  int PID = -1;
+  union task_union * childUnion;
   
-	/*Get a free task*/
+  /* Get a free task */
   if (list_empty(&freequeue)) return -ENOMEM;
   struct list_head *firstFree = list_first(&freequeue);
   list_del(firstFree);
 
-	/*Copy the parent's task union to the child*/
-  union task_union * childUnion = (union task_union*)list_head_to_task_struct(firstFree);
-  copy_data(current(),&childUnion->task,sizeof(struct task_struct));
+	/* Copy the parent's task_union to the child */
+  childUnion = (union task_union*)list_head_to_task_struct(firstFree);
+  copy_data(current(),childUnion,sizeof(union task_union));
  
 	/*Store process adress space*/
-  allocate_DIR(&childUnion->task);
+  allocate_DIR((struct task_struct*)childUnion);
 
 	/*Searching free physical pages*/
   int pag, new_ph_pag, i;
@@ -67,9 +67,8 @@ int sys_fork(void)
 			set_ss_pag(child_PT,PAG_LOG_INIT_DATA+pag,new_ph_pag);
 		} else { // If there aren't enough pages, we should free allocated pages
 			for (i = 0; i < pag; ++i) {
-				unsigned int frameToFree= get_frame(child_PT,PAG_LOG_INIT_DATA+pag);
-				free_frame(frameToFree);
-				del_ss_pag(child_PT,PAG_LOG_INIT_DATA+pag);
+				free_frame(get_frame(child_PT,PAG_LOG_INIT_DATA+i));
+				del_ss_pag(child_PT,PAG_LOG_INIT_DATA+i);
 			}
 			list_add_tail(firstFree,&freequeue);
 
@@ -84,12 +83,12 @@ int sys_fork(void)
 	} 
 	/* Copy parent CODE to child */
 	for (pag=0;pag<NUM_PAG_CODE;++pag) {
-		set_ss_pag(child_PT,PAG_LOG_INIT_DATA+pag,get_frame(parent_PT,PAG_LOG_INIT_DATA+pag));
+		set_ss_pag(child_PT,PAG_LOG_INIT_CODE+pag,get_frame(parent_PT,PAG_LOG_INIT_CODE+pag));
 	} 
 	/* Copy parent DATA to child */
 	for (pag=NUM_PAG_KERNEL+NUM_PAG_CODE;pag<NUM_PAG_KERNEL+NUM_PAG_CODE+NUM_PAG_DATA;++pag) {
 		set_ss_pag(parent_PT,pag+NUM_PAG_DATA,get_frame(child_PT,pag));
-		copy_data((void*)(pag<<12),(void*)((pag+NUM_PAG_DATA)<<12),PAGE_SIZE);
+		copy_data((void*)(pag<<12), (void*)((pag+NUM_PAG_DATA)<<12), PAGE_SIZE);
 		del_ss_pag(parent_PT,pag+NUM_PAG_DATA);
 	}
   /*Deny access from parent to child*/
@@ -97,7 +96,6 @@ int sys_fork(void)
 
 	/*Assign PID*/
 	childUnion->task.PID=++pid;
-  PID = pid;
 
 	int kernel_ebp;
 	asm("movl %%ebp, %0;"
@@ -105,14 +103,14 @@ int sys_fork(void)
 			:
 		 );
   kernel_ebp = (kernel_ebp - (int)current()) + (int)(childUnion);
-	childUnion->task.kernel_esp = kernel_ebp + sizeof(unsigned long);
+	childUnion->task.kernel_esp = kernel_ebp + sizeof(DWord);
 
-	unsigned long aux_ebp =*(unsigned long*)kernel_ebp;
+	DWord aux_ebp =*(DWord*)kernel_ebp;
 
-	childUnion->task.kernel_esp -= sizeof(unsigned long);
-	*(unsigned long*)(childUnion->task.kernel_esp) = (unsigned long)&ret_from_fork;
-	childUnion->task.kernel_esp -= sizeof(unsigned long);
-	*(unsigned long*)(childUnion->task.kernel_esp) = aux_ebp;
+	childUnion->task.kernel_esp -= sizeof(DWord);
+	*(DWord*)(childUnion->task.kernel_esp) = (DWord)&ret_from_fork;
+	childUnion->task.kernel_esp -= sizeof(DWord);
+	*(DWord*)(childUnion->task.kernel_esp) = aux_ebp;
 
 	init_stats(&(childUnion->task.process_stats));
 
@@ -120,7 +118,7 @@ int sys_fork(void)
 
 	list_add_tail(&(childUnion->task.list), &readyqueue);
 
-  return PID;
+  return childUnion->task.PID;
 }
 
 void sys_exit()

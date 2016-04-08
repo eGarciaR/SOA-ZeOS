@@ -144,7 +144,7 @@ void inner_task_switch(union task_union *new) {
 
 	struct task_struct * current_TS = current();
 	unsigned long new_kernel_esp = new->task.kernel_esp;
-
+	
 	asm("mov %%ebp,%0;"
 			"mov %1,%%esp;"
 			"popl %%ebp;"
@@ -210,32 +210,38 @@ void update_process_state_rr(struct task_struct *t, struct list_head *dst_queue)
 
 void sched_next_rr(void) {
 	struct task_struct *t;
-	if (!list_empty(&readyqueue)) {
+	if (!list_empty(&readyqueue)) { /* As list is not empty, execute next process */
 		struct list_head *next_process;
 		next_process = list_first(&readyqueue);
 		list_del(next_process);
 		t = list_head_to_task_struct(next_process);
 	}
-	else {
+	else { /* If list is empty, execute idle_task */
 		t = idle_task;
 	}
+	
+	/* Change the state to running */
 	t->process_state=ST_RUN;
 
 	remaining_quantum = get_quantum(t);
 	update_stats(&(current()->process_stats.system_ticks), &(current()->process_stats.elapsed_total_ticks));
-  update_stats(&(t->process_stats.ready_ticks), &(t->process_stats.elapsed_total_ticks));
-  t->process_stats.total_trans++;
+	update_stats(&(t->process_stats.ready_ticks), &(t->process_stats.elapsed_total_ticks));
+	t->process_stats.total_trans++;
 
+	/* Change to next process */
 	task_switch((union task_union*)t);
 }
 
 void schedule() {
+	/* Update the number of ticks */
 	update_sched_data_rr();
-	if (needs_sched_rr()) { /*Necessity to change the current process*/
+	if (needs_sched_rr()) { /* Necessity to change the current process */
+	  
+		/* Update the state of a process */
 		update_process_state_rr(current(),&readyqueue);
+		
+		/* Select next process */
 		sched_next_rr();
-	}
-	else { /*There is no reason to change the current process yet*/
 	}
 }
 
