@@ -4,7 +4,6 @@
 
 #include <libc.h>
 #include <errno.h>
-#include <types.h>
 
 int errno;
 int res;
@@ -117,7 +116,7 @@ int get_stats(int pid, struct stats *st) {
 	__asm__ __volatile__(
         "int $0x80\n"
         : "=a" (res)
-        : "b" (pid), "c" (st), "a" (35)
+        : "a" (35), "b" (pid), "c" (st)
     );
   
   if (res < 0) {

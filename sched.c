@@ -5,6 +5,7 @@
 #include <sched.h>
 #include <mm.h>
 #include <io.h>
+#include <stats.h>
 
 /**
  * Container for the Task array and 2 additional pages (the first and the last one)
@@ -65,6 +66,17 @@ void cpu_idle(void)
 	}
 }
 
+void init_stats(struct stats *st)
+{
+	st->user_ticks = 0;
+	st->system_ticks = 0;
+	st->blocked_ticks = 0;
+	st->ready_ticks = 0;
+	st->elapsed_total_ticks = get_ticks();
+	st->total_trans = 0;
+	st->remaining_ticks = get_ticks();
+}
+
 void init_idle (void)
 {
 	struct list_head *firstFree = list_first(&freequeue);
@@ -75,6 +87,8 @@ void init_idle (void)
 
 	idle_task_union->task.PID = 0;
 	idle_task_union->task.quantum = DEFAULT_QUANTUM;
+	idle_task_union->task.process_state = ST_RUN;
+	init_stats(&idle_task_union->task.process_stats);
 	allocate_DIR(&idle_task_union->task);
 	idle_task_union->stack[KERNEL_STACK_SIZE-1] = (unsigned long)cpu_idle; //(unsigned long)&cpu_idle;
 	idle_task_union->stack[KERNEL_STACK_SIZE-2] = 0; /*ebp*/
@@ -94,7 +108,9 @@ void init_task1(void)
   
   init_task1_union->task.PID = 1;
 	init_task1_union->task.quantum = DEFAULT_QUANTUM;
+	init_task1_union->task.process_state = ST_RUN;
 	remaining_quantum = DEFAULT_QUANTUM;
+	init_stats(&init_task1_union->task.process_stats);
   allocate_DIR(&init_task1_union->task);
   set_user_pages(&init_task1_union->task);
 
@@ -178,9 +194,18 @@ int needs_sched_rr(void) {
 }
 
 void update_process_state_rr(struct task_struct *t, struct list_head *dst_queue) {
-
-	
-
+	if (t->process_state!=ST_RUN) list_del(&(t->list));
+	if (dst_queue!=NULL)
+	{
+	  list_add_tail(&(t->list), dst_queue);
+	  if (dst_queue!=&readyqueue) t->process_state=ST_BLOCKED;
+	  else
+	  {
+	    update_stats(&(t->process_stats.system_ticks), &(t->process_stats.elapsed_total_ticks));
+	    t->process_state=ST_READY;
+	  }
+	}
+	else t->process_state=ST_RUN;
 }
 
 void sched_next_rr(void) {
@@ -195,7 +220,13 @@ void sched_next_rr(void) {
 	else {
 		t = idle_task;
 	}
+	t->process_state=ST_RUN;
+
 	remaining_quantum = get_quantum(t);
+	update_stats(&(current()->process_stats.system_ticks), &(current()->process_stats.elapsed_total_ticks));
+  update_stats(&(t->process_stats.ready_ticks), &(t->process_stats.elapsed_total_ticks));
+  t->process_stats.total_trans++;
+
 	task_switch((union task_union*)t);
 }
 

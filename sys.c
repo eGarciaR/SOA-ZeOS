@@ -47,7 +47,7 @@ int sys_fork(void)
   int PID = -1;
   
 	/*Get a free task*/
-  if (list_empty(&freequeue)) return -1; // error
+  if (list_empty(&freequeue)) return -ENOMEM;
   struct list_head *firstFree = list_first(&freequeue);
   list_del(firstFree);
 
@@ -62,7 +62,7 @@ int sys_fork(void)
   int pag, new_ph_pag, i;
   page_table_entry *child_PT = get_PT(&childUnion->task);
 	for (pag=0;pag<NUM_PAG_DATA;++pag) {
-		new_ph_pag = alloc_frame(); // New page
+		new_ph_pag = alloc_frame(); // New physical page
 		if (new_ph_pag != -1) {
 			set_ss_pag(child_PT,PAG_LOG_INIT_DATA+pag,new_ph_pag);
 		} else { // If there aren't enough pages, we should free allocated pages
@@ -73,18 +73,20 @@ int sys_fork(void)
 			}
 			list_add_tail(firstFree,&freequeue);
 
-			return -1; //error
+			return -EAGAIN;
 		}
 	} 
 
 	page_table_entry *parent_PT = get_PT(current());
+	/* Copy parent SYSTEM to child */
 	for (pag=0;pag<NUM_PAG_KERNEL;++pag) {
 		set_ss_pag(child_PT,pag,get_frame(parent_PT,pag));
 	} 
+	/* Copy parent CODE to child */
 	for (pag=0;pag<NUM_PAG_CODE;++pag) {
 		set_ss_pag(child_PT,PAG_LOG_INIT_DATA+pag,get_frame(parent_PT,PAG_LOG_INIT_DATA+pag));
 	} 
-
+	/* Copy parent DATA to child */
 	for (pag=NUM_PAG_KERNEL+NUM_PAG_CODE;pag<NUM_PAG_KERNEL+NUM_PAG_CODE+NUM_PAG_DATA;++pag) {
 		set_ss_pag(parent_PT,pag+NUM_PAG_DATA,get_frame(child_PT,pag));
 		copy_data((void*)(pag<<12),(void*)((pag+NUM_PAG_DATA)<<12),PAGE_SIZE);
@@ -112,6 +114,10 @@ int sys_fork(void)
 	childUnion->task.kernel_esp -= sizeof(unsigned long);
 	*(unsigned long*)(childUnion->task.kernel_esp) = aux_ebp;
 
+	init_stats(&(childUnion->task.process_stats));
+
+	childUnion->task.process_state = ST_READY;
+
 	list_add_tail(&(childUnion->task.list), &readyqueue);
 
   return PID;
@@ -122,14 +128,17 @@ void sys_exit()
 	int i; 
 	page_table_entry *processPT = get_PT(current());
 
+	/* Free data structures and resources of the process */
 	for(i=0; i<NUM_PAG_DATA;++i) {
 		free_frame(get_frame(processPT,PAG_LOG_INIT_DATA+i));
 		del_ss_pag(processPT,PAG_LOG_INIT_DATA+i);
 	}
 	
+	/* Add list_head to freequeue to free memory */
 	list_add_tail(&(current()->list),&freequeue);
 	current()->PID=-1;
-
+	
+	/* Select new process */
 	sched_next_rr();
 	
 }
@@ -161,6 +170,8 @@ extern int remaining_quantum;
 
 int sys_get_stats(int pid, struct stats *st) {
 	int i;
+	if (!access_ok(VERIFY_WRITE, st, sizeof(struct stats))) return -EFAULT;
+
 	if (pid < 0) return -EINVAL;
 	for(i=0;i<NR_TASKS;++i) {
 		if (task[i].task.PID == pid) {
