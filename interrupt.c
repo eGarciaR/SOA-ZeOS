@@ -6,7 +6,7 @@
 #include <segment.h>
 #include <hardware.h>
 #include <io.h>
-#include <system.h>
+
 #include <sched.h>
 
 #include <zeos_interrupt.h>
@@ -30,6 +30,23 @@ char char_map[] =
   '\0','\0','\0','\0','\0','\0','\0','\0',
   '\0','\0'
 };
+
+int zeos_ticks = 0;
+
+void clock_routine()
+{
+  zeos_show_clock();
+  zeos_ticks ++;
+  
+  schedule();
+}
+
+void keyboard_routine()
+{
+  unsigned char c = inb(0x60);
+  
+  if (c&0x80) printc_xy(0, 0, char_map[c&0x7f]);
+}
 
 void setInterruptHandler(int vector, void (*handler)(), int maxAccessibleFromPL)
 {
@@ -75,9 +92,8 @@ void setTrapHandler(int vector, void (*handler)(), int maxAccessibleFromPL)
   idt[vector].highOffset      = highWord((DWord)handler);
 }
 
+void clock_handler();
 void keyboard_handler();
-void clock_interrupt_handler();
-
 void system_call_handler();
 
 void setIdt()
@@ -89,42 +105,10 @@ void setIdt()
   set_handlers();
 
   /* ADD INITIALIZATION CODE FOR INTERRUPT VECTOR */
-  setInterruptHandler(32, clock_interrupt_handler, 0);
+  setInterruptHandler(32, clock_handler, 0);
   setInterruptHandler(33, keyboard_handler, 0);
-
-  setTrapHandler(0x80,system_call_handler,3);
+  setTrapHandler(0x80, system_call_handler, 3);
 
   set_idt_reg(&idtR);
 }
 
-//TEST
-void test_task_switch() {
-	if (current()->PID == 1) {
-		task_switch((union task_union *)idle_task);
-	}
-	else {
-		task_switch((union task_union *)init_task);
-	}
-}
-
-void clock_service_routine() {
-	++zeos_ticks;
-	zeos_show_clock();
-	schedule();
-}
-
-void keyboard_service_routine() {
-  Byte data = inb(0x60);
-  Byte aux = data;
-  if (aux&0x80) { // Break
-    data = data & 0x7F;
-    char d;
-    d = char_map[data];
-    if (d == '\0')d = 'c';
-    printc_xy(0,23,d);
-    test_task_switch();
-  }
-  else { // Make
-    
-  }  
-}

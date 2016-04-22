@@ -11,7 +11,8 @@
 #include <mm.h>
 #include <io.h>
 #include <utils.h>
-#include <zeos_mm.h> /* TO BE DELETED WHEN ADDED THE PROCESS MANAGEMENT CODE TO BECOME MULTIPROCESS */
+//#include <zeos_mm.h> /* TO BE DELETED WHEN ADDED THE PROCESS MANAGEMENT CODE TO BECOME MULTIPROCESS */
+
 
 int (*usr_main)(void) = (void *) PH_USER_START;
 unsigned int *p_sys_size = (unsigned int *) KERNEL_START;
@@ -59,7 +60,7 @@ inline void set_seg_regs(Word data_sel, Word stack_sel, DWord esp)
 int __attribute__((__section__(".text.main"))) 
   main(void) 
 {
-	
+
   set_eflags();
 
   /* Define the kernel segment registers  and a stack to execute the 'main' code */
@@ -86,21 +87,17 @@ int __attribute__((__section__(".text.main")))
   /* Initialize Scheduling */
   init_sched();
 
-  /* Initialize idle task data */
+  /* Initialize idle task  data */
   init_idle();
   /* Initialize task 1 data */
   init_task1();
 
   /* Move user code/data now (after the page table initialization) */
   copy_data((void *) KERNEL_START + *p_sys_size, usr_main, *p_usr_size);
-
   
   printk("Entering user mode..."); 
-
-	zeos_ticks = 0;
-	testTS = 0; // TEST
   
-	zeos_init_auxjp();
+  zeos_init_auxjp();
   enable_int();
   /*
    * We return from a 'theorical' call to a 'call gate' to reduce our privileges

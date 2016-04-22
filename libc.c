@@ -3,10 +3,10 @@
  */
 
 #include <libc.h>
-#include <errno.h>
+
+#include <types.h>
 
 int errno;
-int res;
 
 void itoa(int a, char *b)
 {
@@ -43,93 +43,103 @@ int strlen(char *a)
   return i;
 }
 
-int write (int fd, char * buffer, int size) {
-	asm("pushl %ebx;"
-			"movl 8(%ebp),%ebx;"
-			"movl 12(%ebp),%ecx;"
-			"movl 16(%ebp),%edx;"
-			"movl $4,%eax;"
-			"int $0x80;"
-			"popl %ebx;"
-			"movl %eax, res"
-	);
-	
-	if (res < 0) {
-		errno = -res;
-		res = -1;
-	}
-	return res;
+void perror()
+{
+  char buffer[256];
+
+  itoa(errno, buffer);
+
+  write(1, buffer, strlen(buffer));
 }
 
-int gettime () {
-	asm("movl $10,%eax;"
-			"int $0x80;"
-			"movl %eax, res"
-	);
-	
-	if (res < 0) {
-		errno = -res;
-		res = -1;
-	}
-	return res;
-}
-
-int getpid () {
-	asm("movl $20,%eax;"
-	    "int $0x80;"
-	    "movl %eax, res"
-	);
-	
-	if (res < 0) {
-	  errno = -res;
-	  res = -1;
-	}
-	return res;
-}
-
-int fork() {
-  asm("movl $2,%eax;"
-      "int $0x80;"
-      "movl %eax, res"
-  );
+int write(int fd, char *buffer, int size)
+{
+  int result;
   
-  if (res < 0) {
-    errno = -res;
-    res = -1;
+  __asm__ __volatile__ (
+	"int $0x80\n\t"
+	: "=a" (result)
+	: "a" (4), "b" (fd), "c" (buffer), "d" (size));
+  if (result<0)
+  {
+    errno = -result;
+    return -1;
   }
-  return res;
+  errno=0;
+  return result;
 }
-
-void exit() {
-	asm("movl $1,%eax;"
-      "int $0x80;"
-  );
-}
-
-int get_stats(int pid, struct stats *st) {
-	/*asm("movl $35,%eax;"
-      "int $0x80;"
-      "movl %eax, res;"
-			"movl %ebx, pid;"
-			"movl %ecx, st"
-  );*/
-	__asm__ __volatile__(
-        "int $0x80\n"
-        : "=a" (res)
-        : "a" (35), "b" (pid), "c" (st)
-    );
+ 
+int gettime()
+{
+  int result;
   
-  if (res < 0) {
-    errno = -res;
-    res = -1;
+  __asm__ __volatile__ (
+	"int $0x80\n\t"
+	:"=a" (result)
+	:"a" (10) );
+  errno=0;
+  return result;
+}
+
+int getpid()
+{
+  int result;
+  
+  __asm__ __volatile__ (
+  	"int $0x80\n\t"
+	:"=a" (result)
+	:"a" (20) );
+  errno=0;
+  return result;
+}
+
+int fork()
+{
+  int result;
+  
+  __asm__ __volatile__ (
+  	"int $0x80\n\t"
+	:"=a" (result)
+	:"a" (2) );
+  if (result<0)
+  {
+    errno = -result;
+    return -1;
   }
-  return res;
+  errno=0;
+  return result;
 }
 
-void perror() {
-	if (errno == EFAULT) write(1,"Bad address",strlen("Bad address"));
-	else if (errno == EINVAL) write(1,"Invalid argument",strlen("Invalid argument"));
-	else write(1,"Error",strlen("Error"));
-	write (1,"\n",1);
+void exit(void)
+{
+  __asm__ __volatile__ (
+  	"int $0x80\n\t"
+	:
+	:"a" (1) );
 }
 
+int yield()
+{
+  int result;
+  __asm__ __volatile__ (
+  	"int $0x80\n\t"
+	:"=a" (result)
+	:"a" (13) );
+  return result;
+}
+
+int get_stats(int pid, struct stats *st)
+{
+  int result;
+  __asm__ __volatile__ (
+  	"int $0x80\n\t"
+	:"=a" (result)
+	:"a" (35), "b" (pid), "c" (st) );
+  if (result<0)
+  {
+    errno = -result;
+    return -1;
+  }
+  errno=0;
+  return result;
+}
