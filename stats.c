@@ -1,3 +1,4 @@
+#include <stats.h>
 #include <utils.h>
 
 void update_stats(unsigned long *v, unsigned long *elapsed)

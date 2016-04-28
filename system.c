@@ -61,7 +61,7 @@ inline void set_seg_regs(Word data_sel, Word stack_sel, DWord esp)
 int __attribute__((__section__(".text.main"))) 
   main(void) 
 {
-
+	
   set_eflags();
 
   /* Define the kernel segment registers  and a stack to execute the 'main' code */
@@ -88,19 +88,22 @@ int __attribute__((__section__(".text.main")))
   /* Initialize Scheduling */
   init_sched();
 
-  /* Initialize idle task  data */
+  /* Initialize idle task data */
   init_idle();
   /* Initialize task 1 data */
   init_task1();
 
   /* Move user code/data now (after the page table initialization) */
   copy_data((void *) KERNEL_START + *p_sys_size, usr_main, *p_usr_size);
+
   
   printk("Entering user mode..."); 
+
+  zeos_console_init();  
+
+	zeos_ticks = 0;
   
-  zeos_console_init();
-  
-  zeos_init_auxjp();
+	zeos_init_auxjp();
   enable_int();
   /*
    * We return from a 'theorical' call to a 'call gate' to reduce our privileges
