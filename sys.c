@@ -21,6 +21,8 @@
 
 int pid = 1000;
 
+char buff[24];
+
 int check_fd(int fd, int permissions)
 {
   if (fd!=1) return -9; /*EBADF*/
@@ -31,6 +33,11 @@ int check_fd(int fd, int permissions)
 void user_to_system(void)
 {
   update_stats(&(current()->process_stats.user_ticks), &(current()->process_stats.elapsed_total_ticks));
+	/*struct stats st;
+	int p = current()->process_stats.user_ticks;
+	printk("user_ticks:");
+	itoa(p,buff);
+	printk(buff);*/
 }
 
 void system_to_user(void)
@@ -122,7 +129,7 @@ int sys_fork(void)
 	childUnion->task.kernel_esp -= sizeof(DWord);
 	*(DWord*)(childUnion->task.kernel_esp) = aux_ebp;
 
-	init_stats(&(childUnion->task.process_stats));
+	init_stats(&childUnion->task.process_stats);
 
 	childUnion->task.process_state = ST_READY;
 

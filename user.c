@@ -6,6 +6,7 @@ char buff[512];
 int pid;
 
 int set_sched_policy(int);
+int read(int,char*,int);
 
 int __attribute__ ((__section__(".text.main")))
   main(void)
@@ -14,45 +15,55 @@ int __attribute__ ((__section__(".text.main")))
      /* __asm__ __volatile__ ("mov %0, %%cr3"::"r" (0) ); */
 	
   set_sched_policy(0);
-	//struct stats st;
-	//get_stats(getpid(),&st);
-	//itoa(st.user_ticks, buff);
-	//write(1,buff,strlen(buff));
-	//write(1,"\n",1);
-	fork();
-	fork();
-	//fork();
-  //runjp();
-	/*int child[5];
+  runjp();
+	int pids[3];
 	int i;
-	for (i=0;i<5;++i) {
-		child[i]=fork();
-		if (child[i] >0) {
-		}
-		else if (child[i]==0) {
+	for (i=0;i<3;++i) {
+		int j = 0;
+		pids[i]=fork();
+		if (pids[i] == 0) {
 			struct stats st;
-			int j = 0;
-			while(j<1000) {
+			read(1,buff,5);
+			while (j<100) {
 				++j;
-				//write(1,"\n",1);
+				read(1,buff,2);
+			}
+			j = 0;
+			while (j<1000) {
+				++j;
 			}
 			get_stats(getpid(),&st);
 			itoa(st.user_ticks, buff);
-			write(1,"hijo:",7);
+			write(1,"user_ticks: ",strlen("user_ticks: "));
 			write(1,buff,strlen(buff));
 			write(1,"\n",1);
-			break;
-		}	
-		else if (child[i] < 0) {
-			write(1,"UUUUU",5);
+
+			itoa(st.system_ticks, buff);
+			write(1,"system_ticks: ",strlen("system_ticks: "));
+			write(1,buff,strlen(buff));
+			write(1,"\n",1);
+
+			itoa(st.blocked_ticks, buff);
+			write(1,"blocked_ticks: ",strlen("blocked_ticks: "));
+			write(1,buff,strlen(buff));
+			write(1,"\n",1);
+
+			itoa(st.ready_ticks, buff);
+			write(1,"ready_ticks: ",strlen("ready_ticks: "));
+			write(1,buff,strlen(buff));
+			write(1,"\n",1);
+
+			exit();
+		}
+		else if (pids[i] < 0) {
 			perror();
 			exit();
 		}
-	}*/
+	}
   while(1) {
-		itoa(getpid(),buff);
-    write(1,buff,strlen(buff));
-    write(1,"\n",strlen("\n"));
+		//itoa(getpid(),buff);
+    //write(1,buff,strlen(buff));
+    //write(1,"\n",strlen("\n"));
 	  //itoa(gettime(),buff);
     //write(1,buff,strlen(buff));	
 		//write(1,"\n",strlen("\n"));

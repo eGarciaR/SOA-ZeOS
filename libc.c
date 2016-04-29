@@ -113,10 +113,22 @@ int get_stats(int pid, struct stats *st) {
 			"movl %ebx, pid;"
 			"movl %ecx, st"
   );*/
-	__asm__ __volatile__(
+	/*__asm__ __volatile__(
         "int $0x80\n"
         : "=a" (res)
         : "a" (35), "b" (pid), "c" (st)
+    );*/
+	__asm__ __volatile__(
+        "pushl %%ebx\n"        //; Guardem contingut registres
+        "movl %1, %%ebx\n"    //; %ebx = pid
+        "movl %2, %%ecx\n"    //; %ecx = tics 
+        "movl $35, %%eax\n"   //; Posem el 35 a l'eax per l'operacio de get_stats
+        "int $0x80\n"         //; crida interrupció sys_call
+        "movl %%eax, %0\n"    //; resultat = %eax
+        "popl %%ebx\n"
+         : "=g" (res)
+         : "g" (pid), "g" (st)
+         : "ax","bx","cx", "memory"
     );
   
   if (res < 0) {
