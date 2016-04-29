@@ -13,6 +13,6 @@ struct stats
   unsigned long remaining_ticks;
 };
 
-void update_stats(unsigned long *v, unsigned long *elapsed);
+void update_stats(unsigned long *v, unsigned long *elapsed, int b);
 
 #endif /* !STATS_H */
