@@ -162,6 +162,7 @@ void inner_task_switch(union task_union *new) {
 }
 
 void task_switch(union task_union *new) {
+	//printk("task_switch");
 	/*SAVE esi, edi and ebx*/
 	asm("pushl %esi;"
 			"pushl %edi;"
@@ -205,7 +206,10 @@ void update_process_state_rr(struct task_struct *t, struct list_head *dst_queue)
 	  if (dst_queue!=&readyqueue) t->process_state=ST_BLOCKED;
 	  else
 	  {
-	    update_stats(&(t->process_stats.system_ticks), &(t->process_stats.elapsed_total_ticks));
+	    if (!(t->process_state==ST_BLOCKED))update_stats(&(t->process_stats.system_ticks), &(t->process_stats.elapsed_total_ticks),0);
+	    else {
+	      update_stats(&(t->process_stats.system_ticks), &(t->process_stats.elapsed_total_ticks),1);
+	    }
 	    t->process_state=ST_READY;
 	  }
 	}
@@ -228,8 +232,8 @@ void sched_next_rr(void) {
 	t->process_state=ST_RUN;
 
 	remaining_quantum = get_quantum(t);
-	update_stats(&(current()->process_stats.system_ticks), &(current()->process_stats.elapsed_total_ticks));
-	update_stats(&(t->process_stats.ready_ticks), &(t->process_stats.elapsed_total_ticks));
+	update_stats(&(current()->process_stats.system_ticks), &(current()->process_stats.elapsed_total_ticks),0);
+	update_stats(&(t->process_stats.ready_ticks), &(t->process_stats.elapsed_total_ticks),0);
 	t->process_stats.total_trans++;
 
 	/* Change to next process */
@@ -269,6 +273,7 @@ struct list_head *get_task_list(struct task_struct *t) {
 }
 
 void block_process(struct list_head *block_queue) {
+  //printk("BLOCK");
   struct task_struct *t = current();
   struct stats *st = get_task_stats(t);
   
@@ -279,11 +284,17 @@ void block_process(struct list_head *block_queue) {
 }
 
 void unblock_process(struct task_struct *blocked) {
+  //printk("UNBLOCK");
   struct stats *st = get_task_stats(blocked);
+  /*char buff[24];
+  itoa(get_ticks(),buff);
+  printk(buff);
+  itoa(st->elapsed_total_ticks,buff);
+  printk(buff);*/
   struct list_head *l = get_task_list(blocked);
   
   update_process_state(blocked, &readyqueue);
-  st->blocked_ticks += (get_ticks()-(st->elapsed_total_ticks));
+  st->blocked_ticks += (get_ticks()-st->elapsed_total_ticks);
   st->elapsed_total_ticks = get_ticks();
   if (needs_sched()) {
     update_process_state(current(), &readyqueue);

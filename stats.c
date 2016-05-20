@@ -1,7 +1,7 @@
 #include <stats.h>
 #include <utils.h>
 
-void update_stats(unsigned long *v, unsigned long *elapsed)
+void update_stats(unsigned long *v, unsigned long *elapsed, int b)
 {
   unsigned long current_ticks;
   
@@ -9,6 +9,6 @@ void update_stats(unsigned long *v, unsigned long *elapsed)
   
   *v += current_ticks - *elapsed;
   
-  *elapsed=current_ticks;
+  if (!b) *elapsed=current_ticks;
   
 }
