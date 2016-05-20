@@ -1,24 +1,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <signal.h>
-#include <sys/wait.h>
-
-#define MAX 5
-
-int numberOfChildrens = 0;
 
 doServiceFork(int fd) {
-	int pid = fork();
-	if (pid > -1) ++numberOfChildrens;
-	if (pid == 0) {
+	if (fork() == 0) {
 		doService(fd);
 		exit(0);
 	}
-}
-
-void reduceNumberOfChildrens(int signal) {
-	--numberOfChildrens;
 }
 
 
@@ -75,8 +63,6 @@ main (int argc, char *argv[])
       exit (1);
     }
 
-	signal(SIGCHLD, reduceNumberOfChildrens);
-
   while (1) {
 	  connectionFD = acceptNewConnections (socketFD);
 	  if (connectionFD < 0)
@@ -85,10 +71,6 @@ main (int argc, char *argv[])
 		  deleteSocket(socketFD);
 		  exit (1);
 	  }
-
-		if (numberOfChildrens >= MAX) {
-			waitpid(-1,NULL,0);
-		}
 
 	  doServiceFork(connectionFD);
   }
