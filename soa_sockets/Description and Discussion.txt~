@@ -1,6 +1,3 @@
-La manera en la que he recojido los datos que se ven en el documento "Information" es la siguiente: por cada servidor, he usado el programa launchClient, con diferentes parámetros, he ido canviando el número de mensajes a enviar, y el número de clientes, pudiéndo ver así como se comporta cada tipo de 
-servidor en cada situación. 
-
 Lo que podemos ver en los resultados es que en cualquier versión de concurrencia de servidor, el 
 número de mensajes es muy importante, ya que este hace que se envien más datos una vez establecida la conexión y eso se traduce en un mayor tiempo de espera. 
 
